@@ -24,14 +24,14 @@ Lo que tiene que quedar demostrado y visible en el repo:
 
 - Framework de agentes: Google ADK en Python, no LangGraph.
 - Despliegue: Cloud Run, no Agent Engine. Escala a cero, sin instancia mínima, sin balanceador.
-- Modelo: Gemini Flash vía Vertex AI, dos llamadas por consulta como máximo.
+- Modelo: Gemini Flash vía Vertex AI. Dos llamadas por consulta en el camino feliz; una tercera solo si el verificador rechaza la redacción. Tres es el máximo duro.
 - Corpus acotado: Ley 19.496 (Ley del Consumidor) y Reglamento de Comercio Electrónico (Decreto 6 de 2021).
 - Sin base vectorial: el índice de embeddings se genera en el build y va dentro de la imagen.
 - No se guarda el texto del usuario: ni en base de datos, ni en logs, ni en trazas.
 - Límite de uso: 3 consultas por persona al día más un tope global diario. Costo objetivo: menos de US$5 al mes.
 - Front: Next.js con TypeScript, una sola pantalla.
 - Modo aprendizaje: quieres entender cada pieza del CI/CD, no que aparezca hecha.
-- Idioma: documentación del repo en inglés; la interfaz en español de Chile.
+- Idioma: documentación del repo en inglés, incluidos los nombres de archivo en docs/; la interfaz y el dominio (categorías, textos del reclamo) en español de Chile.
 - Regla de eficiencia: no se agrega ninguna tecnología que el producto no necesite.
 
 ## 2. Cómo trabajar en la sesión (modo aprendizaje)
@@ -108,13 +108,14 @@ reclamo-listo/
 ├── infra/                    Terraform
 ├── .github/workflows/        ci.yml, evals.yml, deploy.yml, seguridad.yml
 └── docs/                     todo en inglés
+    ├── plan.md               este documento
     ├── scoping.md            discovery, problema, usuario, métricas de éxito, riesgos
     ├── adr/                  una decisión por archivo
-    ├── arquitectura.md
-    ├── seguridad.md          modelo de amenazas
+    ├── architecture.md
+    ├── security.md           modelo de amenazas
     ├── runbook.md            operar y mantener: desplegar, volver atrás, alertas
     ├── case-study.md         problema, arquitectura, despliegue, impacto
-    └── bitacora.md           qué aprendí por fase
+    └── learning-log.md       qué aprendí por fase
 ```
 
 ## 5. CI/CD
@@ -226,17 +227,21 @@ Cada fase termina desplegada. Primero el pipeline, después la inteligencia.
 - Discovery: conversar con 3 a 5 personas que hayan tenido un problema con una compra. Qué pasó, qué hicieron, dónde se trabaron, qué les habría servido.
 - Alcance: hallazgos del discovery, problema, usuario, qué entra y qué no, riesgos, y métricas de éxito definidas antes de construir.
 - Proyecto de Google Cloud nuevo, con facturación y alertas de presupuesto.
-- Repo público en GitHub, con main protegida.
+- Repo público en GitHub, con main protegida (las reglas de protección son gratis solo en repos públicos).
 - Herramientas locales: gcloud, terraform, uv, node, docker, gh, pre-commit.
 - CLAUDE.md con las convenciones del plan.
 - **Listo cuando:** discovery y alcance están escritos, gcloud y gh autenticados, y el repo tiene README y licencia.
 
 ### Fase 1: Esqueleto desplegado con CI/CD completo
 
-- api con /health y web con una página "hola" que llama a la API.
-- Dockerfiles y Terraform: Artifact Registry, dos servicios Cloud Run, cuentas de servicio, federación de identidad, Firestore, bucket de estado.
-- ci.yml, deploy.yml y seguridad.yml funcionando.
-- Ejercicio: un PR con un test roto y otro con un secreto falso.
+Orden obligatorio: la federación de identidad va primero, porque el job de Terraform en ci.yml necesita leer GCP desde un PR y deploy.yml necesita escribir. Sin OIDC configurado ningún workflow puede autenticarse.
+
+1. Bootstrap a mano (una sola vez): bucket de estado de Terraform, Workload Identity Pool y Provider restringidos a este repo, cuenta de servicio deployer.
+2. Terraform del resto: Artifact Registry, dos servicios Cloud Run, cuentas de servicio web y api, Firestore. El plan ya corre en el PR.
+3. api con /health y web con una página "hola" que llama a la API. Dockerfiles.
+4. ci.yml, deploy.yml y seguridad.yml funcionando.
+5. Ejercicio: un PR con un test roto y otro con un secreto falso.
+
 - **Listo cuando:** un merge a main despliega solo, con prueba de humo y vuelta atrás probada una vez.
 
 ### Fase 2: Corpus y búsqueda
@@ -267,7 +272,7 @@ Cada fase termina desplegada. Primero el pipeline, después la inteligencia.
 
 ### Fase 6: Endurecer, entregar y lanzar
 
-- Protección contra robots, cabeceras de seguridad y seguridad.md completo.
+- Protección contra robots, cabeceras de seguridad y security.md completo.
 - Casos dorados revisados por un abogado.
 - runbook.md: cómo desplegar, volver atrás, qué hacer ante cada alerta y qué necesita otra persona para mantenerlo. Probado con un incidente simulado.
 - case-study.md con la estructura problema, arquitectura, despliegue e impacto, con números reales.
