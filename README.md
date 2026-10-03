@@ -2,7 +2,7 @@
 
 > Describe a consumer problem in plain Chilean Spanish and get three things back: a verdict with the legal articles that apply, a complaint ready to paste into SERNAC (Chile's consumer protection agency), and a short message for the store.
 
-**Status:** Phase 0 — discovery and scoping. Nothing deployed yet.
+**Status:** Phase 0 — technical setup done (GCP project, tooling, repo rules). Discovery interviews in progress. Nothing deployed yet. Next: Phase 1, starting with Workload Identity Federation bootstrap.
 
 ## Why
 
