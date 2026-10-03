@@ -4,3 +4,8 @@ node_modules/
 __pycache__/
 .venv/
 .DS_Store
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform.lock.hcl.bak
