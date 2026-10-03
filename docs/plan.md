@@ -208,7 +208,7 @@ Todos bloquean el merge. Los tests del CI no llaman al modelo real: el LLM va si
 - Logs estructurados: categoría, estado, latencia, tokens, costo estimado. Nunca el relato.
 - Trazas de ADK a Cloud Trace, un tramo por paso del agente.
 - Panel en Cloud Monitoring con métricas sacadas de los logs: consultas por día, latencia, tasa de "sin certeza", tokens y costo.
-- Alertas: presupuesto (US$10 y US$20) y tasa de errores.
+- Alertas: presupuesto (CLP 9.500 y CLP 19.000, ≈ US$10 y US$20) y tasa de errores.
 - Costo estimado por consulta: cerca de medio centavo de dólar; se verifica con datos reales en la Fase 5.
 
 ## 10. Corpus
@@ -226,7 +226,7 @@ Cada fase termina desplegada. Primero el pipeline, después la inteligencia.
 
 - Discovery: conversar con 3 a 5 personas que hayan tenido un problema con una compra. Qué pasó, qué hicieron, dónde se trabaron, qué les habría servido.
 - Alcance: hallazgos del discovery, problema, usuario, qué entra y qué no, riesgos, y métricas de éxito definidas antes de construir.
-- Proyecto de Google Cloud nuevo, con facturación y alertas de presupuesto.
+- Proyecto de Google Cloud nuevo, con facturación y alertas de presupuesto. Hecho el 2026-10-02: proyecto `reclamo-listo` (número 590741883744), presupuesto mensual de CLP 19.000 (≈ US$20) con avisos al 50% y 100%. La cuenta de facturación está en CLP, así que todos los montos del plan en USD se traducen a CLP al configurar.
 - Repo público en GitHub, con main protegida (las reglas de protección son gratis solo en repos públicos).
 - Herramientas locales: gcloud, terraform, uv, node, docker, gh, pre-commit.
 - CLAUDE.md con las convenciones del plan.
