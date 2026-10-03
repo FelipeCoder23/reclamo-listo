@@ -9,3 +9,10 @@ __pycache__/
 *.tfstate.*
 *.tfplan
 .terraform.lock.hcl.bak
+.next/
+next-env.d.ts
+*.tsbuildinfo
+coverage/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
